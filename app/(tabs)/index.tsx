@@ -1,74 +1,106 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import React, { useEffect, useState, useMemo } from "react";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
+import Icon from "react-native-vector-icons/FontAwesome";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+const Home = () => {
+  const router = useRouter();
+  const [user, setUser] = useState<boolean | null>(null);
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  // Fetch token from AsyncStorage
+  useEffect(() => {
+    const fetchToken = async () => {
+      const token = await AsyncStorage.getItem("token");
+      setUser(!!token); // If token exists, set user as logged in
+    };
+    fetchToken();
+  }, []);
+
+  // Features list
+  const features = useMemo(
+    () => [
+      { icon: "credit-card", text: "Expense Tracking" },
+      { icon: "line-chart", text: "Detailed Reports" },
+      { icon: "mobile", text: "Mobile Friendly" },
+    ],
+    []
   );
-}
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+  // Steps list
+  const steps = useMemo(
+    () => [
+      { icon: "user-plus", text: "Step 1: Sign Up" },
+      { icon: "bank", text: "Step 2: Add Sources" },
+      { icon: "money", text: "Step 3: Add Expenses" },
+      { icon: "bar-chart", text: "Step 4: View Reports" },
+    ],
+    []
+  );
+
+  return (
+    <View style={{ flex: 1, backgroundColor: "#E9D5FF" }}>
+      <ScrollView>
+        <View style={{ padding: 20, alignItems: "center" }}>
+          <Icon name="smile-o" size={50} color="#9333EA" />
+          <Text style={{ fontSize: 24, fontWeight: "bold", color: "#1E293B", textAlign: "center", marginTop: 10 }}>
+            Welcome to Vi_Expense_Tracker
+          </Text>
+          <Text style={{ fontSize: 16, color: "#475569", textAlign: "center", marginVertical: 10 }}>
+            Track your expenses effortlessly. Manage your finances with ease and stay on top of your budget.
+          </Text>
+          <TouchableOpacity
+            style={{ backgroundColor: "#9333EA", padding: 10, borderRadius: 8 }}
+            onPress={() => router.push("/signup")}
+          >
+            <Text style={{ color: "white", fontWeight: "bold" }}>Get Started</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={{ padding: 20 }}>
+          <Text style={{ fontSize: 24, fontWeight: "bold", textAlign: "center", color: "#1E293B" }}>Features</Text>
+          <View style={{ marginTop: 20 }}>
+            {features.map((item, index) => (
+              <View key={index} style={{ alignItems: "center", marginVertical: 10 }}>
+                <Icon name={item.icon} size={40} color="#3B82F6" />
+                <Text style={{ fontSize: 18, fontWeight: "600", color: "#334155", marginTop: 5 }}>{item.text}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        <View style={{ padding: 20, backgroundColor: "#F1F5F9" }}>
+          <Text style={{ fontSize: 24, fontWeight: "bold", textAlign: "center", color: "#1E293B" }}>How It Works</Text>
+          <View style={{ marginTop: 20 }}>
+            {steps.map((item, index) => (
+              <View key={index} style={{ alignItems: "center", marginVertical: 10 }}>
+                <Icon name={item.icon} size={50} color="#3B82F6" />
+                <Text style={{ fontSize: 18, fontWeight: "600", color: "#334155", marginTop: 5 }}>{item.text}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        <View style={{ padding: 20, backgroundColor: "#2563EB", alignItems: "center" }}>
+          <Text style={{ fontSize: 24, fontWeight: "bold", color: "white", textAlign: "center" }}>Get Started Today!</Text>
+          <Text style={{ fontSize: 16, color: "#BFDBFE", textAlign: "center", marginVertical: 10 }}>
+            Sign up now and take control of your finances with ViExpenseTracker.
+          </Text>
+          <TouchableOpacity
+            style={{ backgroundColor: "white", padding: 10, borderRadius: 8 }}
+            onPress={() => router.push("/signup")}
+          >
+            <Text style={{ color: "#2563EB", fontWeight: "bold" }}>Register Now</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={{ padding: 15, backgroundColor: "#7C3AED", alignItems: "center" }}>
+          <Text style={{ color: "white", fontSize: 14 }}>© {new Date().getFullYear()} Vi_Expense_Tracker. All rights reserved.</Text>
+          <Text style={{ color: "white", fontSize: 14 }}>Made with ❤️ by Vineet Chelani</Text>
+        </View>
+      </ScrollView>
+    </View>
+  );
+};
+
+export default Home;
