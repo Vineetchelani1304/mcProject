@@ -8,6 +8,7 @@ const { auth } = require('./middlewares/auth');
 const { createExpense, SettleExpense, getUserExpenses, getExpenseDetails } = require('./Controllers/Expense');
 const { createShare, CreatePersonal } = require('./Controllers/Category');
 const { deleteHistory, GetAllSettlements } = require('./Controllers/History');
+const { createOrder, verifyPayment } = require('./Controllers/Razorpay/razorpay');
 
 const app = express();
 const PORT = 4000;
@@ -26,6 +27,8 @@ DataBase.DbConnection();
 app.post('/signup', Signup);
 app.post('/login', Login);
 app.post('/createExpense', auth, createExpense);
+app.post('/createOrder', auth, createOrder);
+app.post('/verifypayment', auth, verifyPayment);
 app.post('/createShare', auth, createShare);
 app.post('/createPersonal', auth, CreatePersonal);
 app.post('/settleExpense', auth, SettleExpense); // Change to POST

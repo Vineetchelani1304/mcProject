@@ -37,3 +37,27 @@ export default function RootLayout() {
     </ThemeProvider>
   );
 }
+
+
+
+// import { NavigationContainer } from '@react-navigation/native';
+// import { createStackNavigator } from '@react-navigation/stack';
+// import CreateExpense from './(tabs)/createExpense';
+// import CreateShare from './(tabs)/';
+// import CreatePersonal from './(tabs)/';
+
+// const Stack = createStackNavigator();
+
+// const App = () => {
+//   return (
+//     <NavigationContainer>
+//       <Stack.Navigator initialRouteName="CreateExpense">
+//         <Stack.Screen name="CreateExpense" component={CreateExpense} />
+//         <Stack.Screen name="CreateShare" component={CreateShare} />
+//         <Stack.Screen name="CreatePersonal" component={CreatePersonal} />
+//       </Stack.Navigator>
+//     </NavigationContainer>
+//   );
+// };
+
+// export default App;

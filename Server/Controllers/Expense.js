@@ -179,17 +179,18 @@ exports.getExpenseDetails = async (req, res) => {
         const user = await User.findById(userId);
 
         if (!user) {
-            return res.status(404).json({
+            return res.status(401).json({
                 success: false,
                 message: "User not found"
             });
         }
 
         const { expenseId } = req.params; // Use req.params to retrieve expenseId
+        console.log("Expense ID: ", expenseId);
         let expenseDetails = await Expenses.findById(expenseId);
 
         if (!expenseDetails) {
-            return res.status(404).json({
+            return res.status(403).json({
                 success: false,
                 message: "Expense not found"
             });

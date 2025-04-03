@@ -26,7 +26,7 @@ const Login = () => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post<{ success: boolean; token?: string; message?: string }>(
-        "http://192.168.133.170:4000/login", 
+        "http://192.168.0.106:4000/login", 
         formData
       );
   

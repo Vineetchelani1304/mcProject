@@ -15,15 +15,15 @@ exports.createShare = async (req, res) => {
             whoPaid,
             paymentDone,
             shareCountEmail,
-            // photos 
         } = req.body;
 
-        console.log("shareCountEmail",shareCountEmail)
+        console.log("shareCountEmail", shareCountEmail);
+
         // Ensure shareCountEmail is an array
         if (!Array.isArray(shareCountEmail)) {
             return res.status(400).json({
                 success: false,
-                message: "shareCountEmail must be an array"
+                message: "shareCountEmail must be an array",
             });
         }
 
@@ -32,34 +32,22 @@ exports.createShare = async (req, res) => {
         if (!checkexpense) {
             return res.status(404).send({
                 success: false,
-                message: "Expense not found"
+                message: "Expense not found",
             });
         }
 
         if (checkexpense.share || checkexpense.personal) {
             return res.status(402).json({
                 success: false,
-                message: "Expense already has a share or personal entry. Each expense must have only one expenditure."
+                message: "Expense already has a share or personal entry. Each expense must have only one expenditure.",
             });
-        }
-
-        const user = await User.findById(userId);
-        console.log("emails :",shareCountEmail)
-
-        // Send email to all shareCountEmail recipients
-        if (user) {
-            await mailSender(
-                shareCountEmail, 
-                "Expenditure Share", 
-                `You have been added to an expense in sharing with ${shareCountEmail.join(', ')} by ${user.email}. Want to explore our website ExpenseTracker?`
-            );
         }
 
         // Check if all required fields are provided
         if (!itemsBought || !itemsCount || !totalCost || !whoPaid || !paymentDone || shareCountEmail.length === 0) {
             return res.status(400).json({
                 success: false,
-                message: "All required fields must be provided"
+                message: "All required fields must be provided",
             });
         }
 
@@ -75,7 +63,6 @@ exports.createShare = async (req, res) => {
             whoPaid,
             paymentDone,
             shareCountEmail,
-            // photos 
         });
 
         const updateExpense = await Expense.findByIdAndUpdate(
@@ -87,17 +74,18 @@ exports.createShare = async (req, res) => {
         return res.status(201).json({
             success: true,
             data: updateExpense,
-            message: "Share created successfully"
+            message: "Share created successfully",
         });
 
     } catch (error) {
         console.error(error);
         return res.status(500).json({
             success: false,
-            message: "Something went wrong while creating the share"
+            message: "Something went wrong while creating the share",
         });
     }
 };
+
 
 exports.CreatePersonal = async (req, res) => {
     try {

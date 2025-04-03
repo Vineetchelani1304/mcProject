@@ -43,7 +43,7 @@ const Signup = () => {
 
     try {
       const response = await axios.post<{ success: boolean; token?: string; message?: string }>(
-        "http://192.168.133.170:4000/signup", // ✅ Fixed: Corrected API endpoint
+        "http://192.168.0.106:4000/signup", // ✅ Fixed: Corrected API endpoint
         formData
       );
 
