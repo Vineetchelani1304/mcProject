@@ -8,7 +8,7 @@ import { PieChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 import { Accelerometer } from 'expo-sensors';
 
-const BACKEND_URL = 'http://192.168.0.106:4000/getUserExpenses';
+const BACKEND_URL = 'http://192.168.29.112:4000/getUserExpenses';
 const screenWidth = Dimensions.get('window').width;
 
 interface Expense {
@@ -22,11 +22,13 @@ interface Expense {
 
 const UserExpenses = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
 
   const fetchExpenses = async () => {
+    setLoading(true);
+    setError('');
     try {
       const token = await AsyncStorage.getItem('token');
       if (!token) {
@@ -54,13 +56,6 @@ const UserExpenses = () => {
       setLoading(false);
     }
   };
-
-  // ✅ Run fetchExpenses when screen is focused
-  useFocusEffect(
-    useCallback(() => {
-      fetchExpenses();
-    }, [])
-  );
 
   const calculateTotals = () => {
     let totalPersonal = 0;
@@ -188,6 +183,3 @@ const UserExpenses = () => {
 };
 
 export default UserExpenses;
-
-
-

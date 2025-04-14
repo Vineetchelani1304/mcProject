@@ -35,7 +35,7 @@ const CreateExpense = () => {
 
         try {
             const response = await axios.post<ExpenseResponse>(
-                'http://192.168.0.106:4000/createExpense',
+                'http://192.168.29.112:4000/createExpense',
                 {
                     expenseHeading,
                     descriptions,

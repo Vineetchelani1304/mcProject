@@ -4,8 +4,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 
-const BACKEND_URL = "http://192.168.0.106:4000"; // Your backend URL
+const BACKEND_URL = "http://192.168.29.112:4000"; // Your backend URL
 
+// 🧩 Interfaces
 interface Expense {
     expenseHeading: string;
     descriptions: string;
@@ -18,6 +19,20 @@ interface Expense {
     personal?: {
         totalCost: number;
         itemsBought?: { name: string; price: number }[];
+    };
+}
+
+interface ExpenseApiResponse {
+    success: boolean;
+    data: Expense;
+    message?: string;
+}
+
+interface CreateOrderResponse {
+    success: boolean;
+    order: {
+        id: string;
+        amount: number;
     };
 }
 
@@ -39,7 +54,7 @@ const ExpenseDetails = () => {
                 const token = await AsyncStorage.getItem('token');
                 if (!token) throw new Error('You must be logged in to view expense details');
 
-                const response = await axios.get(`${BACKEND_URL}/expenses/${expenseId}`, {
+                const response = await axios.get<ExpenseApiResponse>(`${BACKEND_URL}/expenses/${expenseId}`, {
                     headers: { 'Authorization': `Bearer ${token}` },
                 });
 
@@ -70,8 +85,7 @@ const ExpenseDetails = () => {
             const token = await AsyncStorage.getItem('token');
             if (!token) throw new Error('You must be logged in to settle an expense');
 
-            // 🔹 Create Order on Backend
-            const orderResponse = await axios.post(`${BACKEND_URL}/createOrder`, {
+            const orderResponse = await axios.post<CreateOrderResponse>(`${BACKEND_URL}/createOrder`, {
                 amount: expenseDetails.share.totalCost
             });
 
@@ -80,10 +94,9 @@ const ExpenseDetails = () => {
 
             const { id: orderId, amount } = orderResponse.data.order;
 
-            // 🔹 Navigate to Razorpay WebView
             router.push({
                 pathname: "/razorpayWebView",
-                params: { orderId, amount,expenseId }
+                params: { orderId, amount, expenseId }
             });
 
         } catch (err) {
@@ -142,6 +155,3 @@ const styles = StyleSheet.create({
 });
 
 export default ExpenseDetails;
-
-
-

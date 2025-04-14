@@ -5,7 +5,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage"; // ✅ Import AsyncStorage
 import { useRouter, useLocalSearchParams } from "expo-router";
 
-const BACKEND_URL = "http://192.168.0.106:4000";
+const BACKEND_URL = "http://192.168.29.112:4000";
 const RAZORPAY_KEY_ID = "rzp_test_BDWc7xTAoR7Bx3";
 
 const RazorpayWebView = () => {

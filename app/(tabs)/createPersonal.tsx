@@ -44,7 +44,7 @@ const CreatePersonal = () => {
         try {
             // Make the API request
             const response = await axios.post<CreatePersonalResponse>(
-                'http://192.168.0.106:4000/createPersonal',
+                'http://192.168.29.112:4000/createPersonal',
                 {
                     expenseId,
                     itemsBought: itemsBought.split(',').map(item => item.trim()),
